@@ -1,3 +1,6 @@
+# provider e risorse
+
+
 provider "aws" {
   region = var.region
 }
@@ -21,7 +24,8 @@ resource "aws_eks_cluster" "primary" {
 resource "aws_eks_node_group" "primary" {
   cluster_name    = aws_eks_cluster.primary.name
   version         = var.k8s_version
-  release_version = var.release_version
+  # ami version of eks ec2 nodes, optional and default to latest
+  #release_version = var.release_version
   node_group_name = "devops-catalog"
   node_role_arn   = aws_iam_role.worker.arn
   subnet_ids      = aws_subnet.worker[*].id

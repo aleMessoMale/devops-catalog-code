@@ -1,11 +1,11 @@
 variable "region" {
   type    = string
-  default = "us-east-1"
+  default = "ue-west-1"
 }
 
 variable "cluster_name" {
   type    = string
-  default = "devops-catalog"
+  default = "casula-cluster"
 }
 
 variable "min_node_count" {
@@ -20,15 +20,17 @@ variable "max_node_count" {
 
 variable "machine_type" {
   type    = string
-  default = "t2.medium"
+  default = "t2.micro"
 }
 
 variable "k8s_version" {
   type = string
+  default = "1.20"
 }
 
 variable "release_version" {
   type = string
+  default = ""
 }
 
 # variable "ingress_nginx" {
