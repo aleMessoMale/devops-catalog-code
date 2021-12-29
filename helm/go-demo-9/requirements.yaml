@@ -1,3 +1,4 @@
+# dipendenze relative al chart
 dependencies:
 - name: mongodb
   alias: go-demo-9-db

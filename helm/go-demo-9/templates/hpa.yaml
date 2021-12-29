@@ -1,5 +1,5 @@
 ---
-
+# tutto questo blocco viene applicato solo se nel file values.yaml è indicato di farlo
 {{- if .Values.hpa.enabled }}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler

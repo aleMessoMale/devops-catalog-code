@@ -1,5 +1,9 @@
+# se v2, indica che il chart è compatibile solo con helm 3+, questo compatibile con tutte le versioni
 apiVersion: v1
 description: A Helm chart
 name: go-demo-9
+# sia version che appVersion dovrebbero utilizare semantic versioning
+# mandatory, indica la versione del chart
 version: 0.0.1
+# optional, indica la versione dell'app che il chart definisce
 appVersion: 0.0.1
