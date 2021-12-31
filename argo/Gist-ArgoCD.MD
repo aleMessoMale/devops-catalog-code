@@ -200,7 +200,9 @@ cat helm/templates/devops-toolkit.yaml
 
 cat helm/templates/devops-paradox.yaml
 
-# questa è l'app di app, ossia è l'app che si occupa di monitorare le modifiche nei vari ambienti
+# questa è l'app di app, ossia è l'app che controlla per le modifiche sul repo argocd-production
+# e che quando facciamo una modifica al repo si occupa di applicare l'helm chart presente nei due repo delle due 
+# app referenziate (paradox e toolkit) presenti nel repo e nella folder specificate nel descrittore dell'app di app
 cat apps.yaml
 
 cat apps.yaml \
