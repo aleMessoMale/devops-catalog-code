@@ -1,6 +1,7 @@
 server:
   ingress:
     enabled: true
+# skippa controllo certificati (chiaro che è solo per questa demo, da non utilizzare in installazioni reali)
   extraArgs:
   - --insecure
 installCRDs: false
