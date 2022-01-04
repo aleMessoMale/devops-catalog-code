@@ -215,19 +215,36 @@ git commit -m "Changed the org"
 
 git push
 
+# applichiamo anche l'apps di app e entriamo su argocd per vedere le 3 app (l'app di apps e le altre due referenziate)
+# l'app di apps anche visivamente referenzia le altre 2, vedi appunti su google docs
 kubectl --namespace argocd apply \
 --filename apps.yaml
 
 open http://argocd.$INGRESS_HOST.nip.io
 
+# qua vediamo fondamentalmente che tutti i descrittori presenti nei due repo (devops-paradox e devops-toolkit) son stati
+# applicati al namespace production. Questo perché al push dell'app di apps, grazie al synch, lui aggiorna tutte le apps
+# che referenzia, apps che sono packettizzate grazie ad helm e son presenti nei vari repo (path helm, ndr)
+
+# quindi quello che facciamo è creare un'app di apps, aggiungere le app di argocd con i vari descrittori come in questo caso
+# (devops-paradox.yaml su helm folder di argocd-production) e a quel punto, pushare i descrittori k8s nei vari repo
+# devops-paradox.git ecc ecc e lasciar fare tutto ad ArgoCD
 kubectl --namespace production get all
 
+# approfittiamo per fare un deploy e lo facciamo modificando gli ingresses
 kubectl --namespace production get ingresses
 
 ###################################################
 # Updating Applications Through GitOps Principles #
 ###################################################
 
+# vogliamo far si che il tag dell'immagine a cui punta devops-toolkit app sia non latest ma una specifica
+# e vogliamo che punti anche ad un altro ingress, ossia quello presente nel nostro cluster e non quello nel repo di Viktor
+# per farlo modifichiamo logicamente il descrittore dell'app devops-toolkit.yaml dell'ambiente di production
+# ossia il file helm/templates/devops-toolkit.yaml nel repo argocd-production.git
+# non abbiamo modificato il descrittore dell'app nel repo specifico (devops-toolkit.git)
+# ci basta pushare questa modifica perché ArgoCD faccia il resto, vedendo la modifica in una delle argocd app
+# puntate dall'app di apps
 cat helm/templates/devops-toolkit.yaml \
 | sed -e "s@latest@2.9.17@g" \
 | sed -e "s@devopstoolkitseries.com@devops-toolkit.$INGRESS_HOST.nip.io@g" \
@@ -239,10 +256,7 @@ git commit -m "New release"
 
 git push
 
-kubectl --namespace production get \
-deployment devops-toolkit-devops-toolkit \
---output jsonpath="{.spec.template.spec.containers[0].image}"
-
+# verificato quindi che il tag dell'immagine è cambiato dopo qualche minuto idem per l'ingress 
 kubectl --namespace production get \
 deployment devops-toolkit-devops-toolkit \
 --output jsonpath="{.spec.template.spec.containers[0].image}"
@@ -251,6 +265,7 @@ kubectl --namespace production get ingresses
 
 open http://devops-toolkit.$INGRESS_HOST.nip.io
 
+# rimuoviamo inoltre devops-paradox app per verificare che non sia piu presente
 rm helm/templates/devops-paradox.yaml
 
 git add .
